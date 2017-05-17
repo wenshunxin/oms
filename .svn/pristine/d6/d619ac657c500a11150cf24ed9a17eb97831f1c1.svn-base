@@ -1,0 +1,240 @@
+<template>
+    <div style="height:100%;overflow: auto;background:#F2f2f2;padding:20px;">
+        <el-tabs v-model="activeName" @tab-click="handleClick" class="w-tabBottom">
+            <el-tab-pane  name="second">
+                <span slot="label"> 全部列表<b>12</b></span>
+            </el-tab-pane>
+            <el-tab-pane>
+                <span slot="label"> 已处理<b>12</b></span>
+            </el-tab-pane>
+            <el-tab-pane>
+                <span slot="label"> 未处理<b>12</b></span>
+            </el-tab-pane>
+            <el-tab-pane>
+                <span slot="label"> 已驳回<b>12</b></span>
+            </el-tab-pane>
+        </el-tabs>
+
+        <el-col :span="24" style="height:60px;line-height: 60px;" >
+			<el-form :inline="true">
+				<el-input icon="search" style="width:40%;margin-right:5%;" :span="8" v-model="text" placeholder="请输入订单编号/产品名称/收货人" type="text" class="tablesearch_box" :maxlength="30"></el-input>
+				<el-date-picker v-model="startTime" type="date" editable placeholder="选择日期"></el-date-picker>
+				-
+				<el-date-picker v-model="endTime" type="date" editable placeholder="选择日期"></el-date-picker>
+				<el-button type="primary" class="w-search-button" style="margin-left:2%;" @click="handleSearch">查询</el-button>
+			</el-form>
+		</el-col>
+        <!--渲染列表-->
+        <!--表头-->
+        <table border="0" cellspaning="0" cellpadding="0" style="width:100%; margin-bottom:5px;">
+            <thead style="width:100%;height:3rem;line-height: 3rem;" class="tThead">
+                 <th style="width:30%;">用户</th>
+                 <th style="width:10%;">设备数量</th>
+                 <th style="width:10%;">服务项</th>
+                 <th style="width:10%;">服务申请</th>
+                 <th style="width:10%;">状态</th>
+                 <th style="width:20%;">操作</th>
+            </thead>
+        </table>
+
+        <!--渲染列表内容-->
+        <table border="1" v-for="row in dataTable" cellspaning="0" cellpadding="0" style="width:100%;margin-bottom:5px;background:#fff;">
+            <thead>
+                 <tr style="background:#C4E4F4;">
+                    <td colspan="6" style="text-align: left;padding-left:20px;"><el-checkbox style="margin-left:5px;">用户账号:{{row.userId}} &nbsp;&nbsp;&nbsp;&nbsp;姓名:{{row.userName}}</el-checkbox></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in row.orderList" style="width:100%;">
+                    <td style="width:30%;" class="w-ttd">{{index+1}}&nbsp;&nbsp;&nbsp;订单编号:&nbsp;&nbsp;{{item.orderNumber}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.orderData}}</td>
+                    <td style="width:10%;">{{item.orderNum}}</td>
+                    <td style="width:10%;">{{item.orderServer}}</td>
+                    <td style="width:10%;">{{item.orderApply}}</td>
+                    <td style="width:10%;">{{item.orderState}}</td>
+                    <td style="width:20%;">
+                        <el-button type="text" size="small" @click="handleLook(item, index)">查看</el-button>
+                        <el-button type="text" size="small"  @click="handleManage(item, index)">处理</el-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--分页-->
+		<el-col :span="24" class="toolbar" >
+             <el-pagination  style="text-align:right;"  :current-page="currentPage"   layout= " total ,prev, pager, next" :total="total"  @current-change="currentChange"></el-pagination>
+        </el-col>
+    </div>
+</template>
+<script>
+    export default{
+        data(){
+            return {
+                activeName: 'second',
+                //查询内容
+				text:"",
+				//日期
+				startTime:'',
+				endTime:"",
+
+				//分页内容
+                currentPage:1,//当前页数
+                total:50,  //总条数
+                currentPage:15, //每页显示的条数
+
+                //模拟数据
+                dataTable:[
+                    {
+                        sid:1,
+                        userId:"DO20170313002",
+                        userName:"李四",
+                        orderList:[
+                            {
+                                sid:11,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            },
+                            {
+                                sid:12,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            },
+                            {
+                                sid:13,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            }
+                        ]
+                    },
+                    {
+                        sid:2,
+                        userId:1234567,
+                        userName:"李四",
+                        orderList:[
+                            {
+                                sid:21,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            },
+                            {
+                                sid:22,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            },
+                            {
+                                sid:23,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            }
+                        ]
+                    },
+                    {
+                        sid:3,
+                        userId:1234567,
+                        userName:"李四",
+                        orderList:[
+                            {
+                                sid:31,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已驳回"
+
+                            },
+                            {
+                                sid:32,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"已处理"
+
+                            },
+                            {
+                                sid:32,
+                                orderNumber:"DO20170313002",
+                                orderData:"2017-3-15",
+                                orderNum:10,
+                                orderServer:7,
+                                orderApply:8,
+                                orderState:"未处理"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        methods:{
+            handleClick(tab, event) {
+                // console.log(tab, event);
+            },
+            handleSearch:function(){
+                // alert("1");
+            },
+            currentChange:function(val){
+                this.currentPage=val;
+            },
+            //点击查看函数
+            handleLook:function(row,index){
+                // console.log(row.sid);
+                this.$router.push("/serviceDetails");
+            },
+            //点击处理函数
+            handleManage:function(row,index){
+                // console.log(row.sid);
+                this.$router.push("/serviceHandle")
+            }
+            
+        }
+    };
+</script>
+<style>
+    b{
+        color:#28A9FF;
+    }
+    .w-tabBottom .el-tabs__header{
+        margin-bottom:0;
+    }
+    .tThead th{
+        text-align: center;
+        background:#E4E4E4;
+    }
+    .w-ttd{
+        text-align: left;
+        padding-left:30px;
+    }
+    button.name2{
+        display:none;
+    }
+</style>

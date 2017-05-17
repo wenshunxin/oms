@@ -1,0 +1,110 @@
+<template lang="html">
+    <section class="L-background">
+        <div class="L-center-div">
+            <!-- 搜索框 -->
+            <el-col :span="24" class="toolbar" style="margin: 10px 0;">
+                <el-form :inline="true">
+                    <el-input placeholder="请输入设备名称/设备ID" type="text" class="table_search_box L-bindmessage-search" :maxlength="30" icon="search"></el-input>
+                    <el-form-item >
+                        <el-button type="primary" class="L-button-content L-bindmessage-button" v-on:click="">搜索</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+
+            <!-- 表格 -->
+            <el-table :data="messageData" border style="width: 100%">
+                <el-table-column type="index" label="序号" width="80">
+                </el-table-column>
+                <el-table-column prop="EquipmentName" label="设备名称" style="width:15%;">
+                </el-table-column>
+                <el-table-column prop="EquipmentID" label="设备ID" style="width:10%;">
+                </el-table-column>
+                <el-table-column prop="EquipmentState" label="状态" style="width:10%;">
+                </el-table-column>
+                <el-table-column prop="EquipmentOperation" label="操作">
+                    <template scope="scope">
+                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <!-- 分页 -->
+            <el-pagination class="L-pagination" layout="total, prev, pager, next" @current-change="currentChange"  :current-page="this.page.currentPage" :total="this.page.total ">
+    		</el-pagination>
+        </div>
+    </section>
+</template>
+
+<script>
+    import { api } from '../js/api/api';
+export default {
+    data(){
+        return{
+            messageData:[{
+                EquipmentName:'',
+                EquipmentID:'',
+                EquipmentState:'',
+                EquipmentOperation:''
+            }],
+            page:{
+                currentPage:1,
+                total:0,
+                rows:15
+            }
+        }
+    },
+    mounted(){
+        // this.getUsers();
+        this.countBoxHeight();
+    },
+    methods:{
+        getUsers:function(){
+            let para = Object.assign({},this.messageData);
+            this.$http.post( api.xxx, para).then((res) => {
+                this.messageData = res.body.rows
+            })
+        },
+        countBoxHeight:function(){
+            let LBackground = document.getElementsByClassName("L-background");
+            let yheader = document.getElementsByClassName("yheader");
+            LBackground[0].style.height = (window.outerHeight - yheader[0].clientHeight) + "px";
+        },
+        handleEdit:function(){
+
+        },
+        currentChange:function(val){
+            this.page.currentPage = val;
+            this.getUsers();
+        }
+    }
+}
+</script>
+
+<style lang="css">
+    .L-bindmessage-search{
+        width: 85% !important;
+    }
+    .L-button-content{
+        width: 13rem !important;
+        margin: 0 0 0 5px !important;
+    }
+    .L-center-div .el-form-item__content ,.L-button-content{
+        width:100%;
+    }
+    .L-center-div .toolbar{
+        position: relative;
+        margin: 1rem 0;
+    }
+    .L-center-div .toolbar .el-form::before{
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom:0;
+        width: 100%;
+        height:0;
+        border: 1px solid #797979;
+    }
+    .L-center-div .el-table{
+        margin-top: 1rem !important;
+    }
+</style>

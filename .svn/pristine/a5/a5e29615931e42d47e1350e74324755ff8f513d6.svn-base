@@ -1,0 +1,144 @@
+<template>
+    <div style="padding:10px 20px 0 20px;">
+        <div>
+            <div style="margin-bottom:10px;">
+                <el-input placeholder="订单编号/产品名称/收货人" icon="search" class="yDingdansou" style="width:30%;"></el-input>
+                <el-button type="primary">搜索</el-button>
+            </div>
+            <div style="border:1px solid #838383;height:0;margin-bottom:15px;"></div>
+            <div class="yDingDanBT">
+                <div class="ychanPinN">
+                    <div>产品</div>
+                    <div>数量</div>
+                </div>
+                <div>总计数量</div>
+                <div>收货人</div>
+                <div>状态</div>
+                <div>操作</div>
+            </div>
+            <div v-for="item in tableData" class="yDingDanMain">
+                <div class="yDingDanTimeAndBH">
+                    <div>时间：{{item.date}}</div>
+                    <div>订单编号：{{item.dingdanhao}}</div>
+                </div>
+                <div class="yDingDanInfo">
+                    <div>
+                        <div v-for="name in item.name" class="ychanPinN">
+                            <div>{{name.name}}</div>
+                            <div>{{name.num}}</div>
+                        </div>
+                    </div>
+                    <div class="yCenter">{{item.sum}}</div>
+                    <div class="yCenter">{{item.getName}}</div>
+                    <div class="yCenter">{{item.state}}</div>
+                    <div >
+                        <div v-for="sets in item.set">
+                            <el-button @click="edit">{{sets}}</el-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <!-- <to-examine></to-examine> -->
+        </div>
+    </div>
+</template>
+<script>
+    import toExamine from '../toExamine.component.vue'
+    export default {
+        data() {
+            return {
+                selectTab:"first",
+                selectTabInfoNum:"3",
+                value6:"",
+                tableData: [
+                    {
+                        date:"2016-03-03",
+                        dingdanhao:"123456789",
+                        name:[
+                            {
+                                name:"天创农业物联网设备传感器JN-SS-001",
+                                num:3
+                            },
+                            {
+                                name:"小文",
+                                num:3
+                            }
+                        ],
+                        sum:6,
+                        getName:"龙龙",
+                        set:["cc","dd"]
+                    },
+                    {
+                        date:"2016-03-03",
+                        dingdanhao:"123456789",
+                        name:[
+                            {
+                                name:"小文",
+                                num:3
+                            },
+                            {
+                                name:"小文",
+                                num:3
+                            }
+                        ],
+                        sum:6,
+                        getName:"龙龙",
+                        state:"发过",
+                        set:["aa","bb"]
+                    }
+                ]
+        }
+    },
+    methods:{
+        info (aa) {
+            console.log(aa)
+        },
+        edit () {
+            alert();
+            this.$router.push("/toExamine")
+        }
+    }
+}
+</script>
+<style>
+    .yDingDanMain{
+        margin-bottom: 2px;
+    }
+    .yDingDanBT,.yDingDanTimeAndBH,.yDingDanInfo,.ychanPinN{
+        display: -webkit-box;
+    }
+    .yDingDanBT{
+        background-color: #eef1f6;
+        text-align: center;
+        margin-bottom: 2px;
+    }
+    .yDingDanBT>div,.yDingDanInfo>div{
+        width:0%;
+        -webkit-box-flex:1;
+        border-bottom: 1px solid #000;
+        line-height: 40px;
+    }
+    .yDingDanInfo>div:first-child,.yDingDanBT>div:first-child{
+        -webkit-box-flex:2;
+    }
+    .yDingDanInfo{
+        text-align: center;
+    }
+    .yDingDanTimeAndBH{
+        background-color:#c4e4f4;
+        line-height: 40px;
+
+    }
+    .ychanPinN>div{
+        width: 0%;
+        -webkit-box-flex:1;
+    }
+    .ychanPinN>div:first-child{
+        -webkit-box-flex:3;
+    }
+    .yDingdansou{
+        width: 30% !important;
+    }
+</style>
